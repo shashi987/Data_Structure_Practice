@@ -54,6 +54,54 @@ void InsertLast(PPNODE head, int no)
     }
 }
 
+void DeleteFirst(PPNODE head)
+{
+    PNODE temp = NULL;
+
+    if(*head == NULL)
+    {
+        return;
+    }
+    else if((*head) -> next == NULL)
+    {
+        free(*head);
+        *head = NULL;
+    }
+    else
+    {
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+
+void DeleteLast(struct node** head)
+{
+    PNODE temp = NULL;
+
+    if(*head == NULL)
+    {
+        return;
+    }
+    else if((*head)->next == NULL)
+    {
+        free(*head);
+        *head = NULL;
+    }
+    else
+    {
+        temp = *head;
+
+        while(temp->next->next != NULL)
+        {
+            temp = temp->next;
+        }
+        free(temp->next);
+        temp->next = NULL;
+    }
+
+}
+
 void Display(struct node* head)
 {
     while(head != NULL)
@@ -93,7 +141,17 @@ int main()
 
     Display(first);
     iRet = CountNode(first);
-    printf("Linkedlist nodes count : %d", iRet);
+    printf("Linkedlist nodes count : %d\n", iRet);
+
+    DeleteFirst(&first);
+    Display(first);
+    iRet = CountNode(first);
+    printf("Linkedlist nodes count : %d\n", iRet);
+
+    DeleteLast(&first);
+    Display(first);
+    iRet = CountNode(first);
+    printf("Linkedlist nodes count : %d\n", iRet);
 
     return 0;
 }
