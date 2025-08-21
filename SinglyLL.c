@@ -102,16 +102,6 @@ void DeleteLast(struct node** head)
 
 }
 
-void Display(struct node* head)
-{
-    while(head != NULL)
-    {
-        printf("| %d |->\t", head->data);
-        head = head->next;
-    }
-    printf("NULL\n");
-
-}
 
 int CountNode(struct node* head)
 {
@@ -124,6 +114,95 @@ int CountNode(struct node* head)
     }
 
     return iCount;
+}
+
+
+void Display(struct node* head)
+{
+    while(head != NULL)
+    {
+        printf("| %d |->\t", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+
+}
+
+void InsertAtPos(struct node** head, int no, int iPos)
+{
+    int iCount = CountNode(*head);
+    PNODE newn = NULL;
+    PNODE temp = NULL;
+
+    if(iPos < 1 || iPos > iCount+1)
+    {
+        printf("Invalid Position\n");
+        return;
+    }
+
+    if(iPos == 1)
+    {
+        InsertFirst(head, no);
+    }
+    else if(iPos == iCount+1)
+    {
+        InsertLast(head, no);
+    }
+    else
+    {
+        newn = (struct node*)malloc(sizeof(struct node));
+        newn->data = no;
+        newn->next = NULL;
+
+        temp = *head;
+
+        for(int i = 0; i < iPos-1; i++)
+        {
+            temp = temp->next;
+        }
+
+        newn->next = temp->next;
+        temp->next = newn;
+    }
+}
+
+
+void DeleteAtPos(struct node** head, int iPos)
+{
+    int Count = 0;
+    PNODE temp = NULL;
+    PNODE target = NULL;
+
+    Count = CountNode(*head);
+
+    if(iPos < 1 || iPos > Count)
+    {
+        return;
+    }
+
+    if(iPos == 1)
+    {
+        DeleteFirst(head);
+    }
+    else if(iPos == Count)
+    {
+        free(*head);
+        *head = NULL;
+    }
+    else
+    {
+        temp = *head;
+
+        for (int i = 0; i < iPos-1; i++)
+        {
+            temp = temp->next;
+        }
+
+        target = temp->next;
+        temp->next = target->next;
+        free(target);
+    }
+
 }
 
 int main()
@@ -143,6 +222,14 @@ int main()
     iRet = CountNode(first);
     printf("Linkedlist nodes count : %d\n", iRet);
 
+    InsertAtPos(&first, 23, 4);
+    InsertAtPos(&first, 11, 5);
+
+    Display(first);
+    iRet = CountNode(first);
+    printf("Linkedlist nodes count : %d\n", iRet);
+
+
     DeleteFirst(&first);
     Display(first);
     iRet = CountNode(first);
@@ -152,6 +239,12 @@ int main()
     Display(first);
     iRet = CountNode(first);
     printf("Linkedlist nodes count : %d\n", iRet);
+
+    DeleteAtPos(&first, 5);
+    Display(first);
+    iRet = CountNode(first);
+    printf("Linkedlist nodes count : %d\n", iRet);
+
 
     return 0;
 }
